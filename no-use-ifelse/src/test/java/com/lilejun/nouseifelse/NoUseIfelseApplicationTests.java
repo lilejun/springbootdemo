@@ -270,6 +270,4 @@ class NoUseIfelseApplicationTests {
         }
         System.out.println(JSON.toJSON(userList));
     }
-
-    //测试一下提交
 }
