@@ -1,23 +1,20 @@
 package com.lilejun.nouseifelse;
 
+import cn.hutool.core.lang.Snowflake;
+import cn.hutool.core.util.IdUtil;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
 import com.lilejun.nouseifelse.entity.GlobalMenu;
-import com.lilejun.nouseifelse.entity.SiteMenu;
 import com.lilejun.nouseifelse.entity.Student;
 import com.lilejun.nouseifelse.entity.User;
 import com.lilejun.nouseifelse.enums.BankMoneyRateEnum;
 import com.lilejun.nouseifelse.service.OpBankRateService;
 import com.lilejun.nouseifelse.service.impl.BankMoneyRateOpFactory;
-import com.lilejun.nouseifelse.service.impl.CacluteSvipImpl;
 import com.lilejun.nouseifelse.service.impl.CaculateMoney;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.sql.SQLOutput;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -61,10 +58,10 @@ class NoUseIfelseApplicationTests {
     private CaculateMoney caculateMoney;
 
     @Test
-    public void testStrategy(){
+    public void testStrategy() {
         //测试策略模式计算不同用户应付金额
         double money = caculateMoney.cacluteMoneyByUserType("svip", 100);
-        System.out.println("当前计算的金额是："+money);
+        System.out.println("当前计算的金额是：" + money);
     }
 
 
@@ -123,15 +120,15 @@ class NoUseIfelseApplicationTests {
 
     public List<User> initUserList() {
         List<User> userList = new ArrayList<>();
-        userList.add(new User("张三", "男", 24, "武汉大 学",26.464309367526013));
-        userList.add(new User("张三", "男", 24, "武汉大学",26.409664498874932));
-        userList.add(new User("李四", "男", 25, "武汉大学",26.544789459894012));
-        userList.add(new User("赵六", "男", 20, "武汉大学",26.44533135641237));
-        userList.add(new User("王丽", "女", 24, "武汉大学",24.879002722223063));
-        userList.add(new User("李雪", "女", 22, "华中科技大学",22.93708299837208));
-        userList.add(new User("刘红", "女", 26, "华中科技大学",21.89874293747005));
-        userList.add(new User("孙宇", "男", 20, "长江大学",20.629371054321425));
-        userList.add(new User("曹雨", "女", 21, "长江大学",20.452960548761833));
+        userList.add(new User("张三", "男", 24, "武汉大 学", 26.464309367526013));
+        userList.add(new User("张三", "男", 24, "武汉大学", 26.409664498874932));
+        userList.add(new User("李四", "男", 25, "武汉大学", 26.544789459894012));
+        userList.add(new User("赵六", "男", 20, "武汉大学", 26.44533135641237));
+        userList.add(new User("王丽", "女", 24, "武汉大学", 24.879002722223063));
+        userList.add(new User("李雪", "女", 22, "华中科技大学", 22.93708299837208));
+        userList.add(new User("刘红", "女", 26, "华中科技大学", 21.89874293747005));
+        userList.add(new User("孙宇", "男", 20, "长江大学", 20.629371054321425));
+        userList.add(new User("曹雨", "女", 21, "长江大学", 20.452960548761833));
         return userList;
     }
 
@@ -231,43 +228,53 @@ class NoUseIfelseApplicationTests {
     }
 
     @Test
-    public void foreachMap(){
-        Map<String,User> map = new HashMap<>();
-        map.put("1",new User("张三", "男", 24, "武汉大学",1.22));
-        map.put("2",new User("张四", "男", 24, "武汉大学",2.33));
-        for (Map.Entry<String,User> entry:map.entrySet()){
+    public void foreachMap() {
+        Map<String, User> map = new HashMap<>();
+        map.put("1", new User("张三", "男", 24, "武汉大学", 1.22));
+        map.put("2", new User("张四", "男", 24, "武汉大学", 2.33));
+        for (Map.Entry<String, User> entry : map.entrySet()) {
             String key = entry.getKey();
             User user = entry.getValue();
-            System.out.println("键key="+key+",值value="+JSON.toJSON(user));
+            System.out.println("键key=" + key + ",值value=" + JSON.toJSON(user));
         }
     }
 
     @Test
-    public void testFormatter(){
-        String a ="2800.0";
+    public void testFormatter() {
+        String a = "2800.0";
         Formatter formatter = new Formatter();
-        Formatter f = formatter.format("$%,d",a);
-        System.out.println("格式化之后的值：="+f.toString());
+        Formatter f = formatter.format("$%,d", a);
+        System.out.println("格式化之后的值：=" + f.toString());
     }
 
     @Test
-    public void sortByScore(){
+    public void sortByScore() {
         List<User> userList = initUserList();
         List<User> sortedUserList = userList.stream()
                 .sorted((s1, s2) -> s2.getScore().compareTo(s1.getScore()))
                 .collect(Collectors.toList());
         System.out.println(JSON.toJSON(sortedUserList));
     }
+
     @Test
-    public void subStringStr(){
+    public void subStringStr() {
         String a = "htaatp://www.baidu.com";
         System.out.println(a.contains("https"));
-        a=a.replace("http","https");
+        a = a.replace("http", "https");
         System.out.println(a);
         List<User> userList = initUserList();
-        for (User user:userList) {
+        for (User user : userList) {
             user.setName("123456");
         }
         System.out.println(JSON.toJSON(userList));
+    }
+
+    @Test
+    public void testHuTool() {
+        Snowflake snowflake = IdUtil.createSnowflake(1, 1);
+        for (int i = 0; i < 100; i++) {
+            long id = snowflake.nextId();
+            System.out.println("IdUtil雪花算法生成的ID="+id);
+        }
     }
 }
